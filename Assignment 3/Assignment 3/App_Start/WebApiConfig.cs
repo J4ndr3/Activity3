@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
+//using System.Web.Http.Cors;
 
 namespace Assignment_3
 {
@@ -26,5 +27,10 @@ namespace Assignment_3
                 defaults: new { id = RouteParameter.Optional }
             );
         }
+        //private static void EnableCrossSiteRequests(HttpConfiguration config)
+        //{
+        //    var cors = new EnableCorsAttribute(
+        //        )
+        //}
     }
 }

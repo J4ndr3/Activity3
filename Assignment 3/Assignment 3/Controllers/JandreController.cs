@@ -13,12 +13,12 @@ namespace Assignment_3.Controllers
     public class JandreController : ApiController
     {
         [System.Web.Mvc.Route("api/Jandre/getProducts")]
-        [HttpPost]
-        public List<dynamic> getProducts()
+        [HttpGet]
+        public HttpResponseMessage getProducts()
         {
             MyHardwareEntities db = new MyHardwareEntities();
             db.Configuration.ProxyCreationEnabled = false;
-            return getProductReturnList(db.Products.ToList());
+            //return getProductReturnList(db.Products.ToList());
             //List<dynamic> productList = new List<dynamic>();
             //dynamic product1 = new ExpandoObject();
             //product1.ID = 1;
@@ -28,7 +28,9 @@ namespace Assignment_3.Controllers
             //product2.ID = 2;
             //product2.Desc = "whatever ML";
             //productList.Add(product2);
-
+            var response = Request.CreateResponse(HttpStatusCode.OK, getProductReturnList(db.Products.ToList()));
+            response.Headers.Add("Access-Control-Allow-Origin", "*");
+            return response;
             //return productList;
         }
         private List<dynamic> getProductReturnList(List<Product> forClient)
@@ -39,6 +41,7 @@ namespace Assignment_3.Controllers
                 dynamic product1 = new ExpandoObject();
                 product1.ID = prod.P_CODE;
                 product1.Desc = prod.P_DESCRIPT;
+                product1.VCode = prod.V_CODE;
                 productList.Add(product1);
             }
             return productList;
@@ -82,11 +85,11 @@ namespace Assignment_3.Controllers
         }
         [System.Web.Mvc.Route("api/Jandre/addProduct")]
         [HttpGet]
-        public List<dynamic> addProduct([FromBody] List<Product> prod)
+        public HttpResponseMessage addProduct([FromUri] Product prod)
         {
             MyHardwareEntities db = new MyHardwareEntities();
             db.Configuration.ProxyCreationEnabled = false;
-            db.Products.AddRange(prod);
+            db.Products.Add(prod);
             db.SaveChanges();
             return getProducts();
         }
